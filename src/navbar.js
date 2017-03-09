@@ -5,13 +5,8 @@ import ReactDOM from "react-dom";
 import { Navbar } from "react-bootstrap";
 import { Nav } from "react-bootstrap";
 import { NavItem } from "react-bootstrap";
-import { NavDropdown } from "react-bootstrap";
-import { MenuItem } from "react-bootstrap";
-import { Popover } from "react-bootstrap";
-import { Tooltip } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
-import { OverlayTrigger } from "react-bootstrap";
 
 const navbarInstance = (
   <Navbar inverse collapseOnSelect>
@@ -33,50 +28,14 @@ const navbarInstance = (
   </Navbar>
 );
 
-var loggedIn = false;
-
-function login() {
-    console.log("Hello World!");
-
-    // Bring up modal for login
-    LoginModal.open();
-
-    function checkCredentials() {
-        // Return login modal
-        loggedIn = true;
-    }
-    function changeToAccounts() {
-        if(loggedIn) {
-            var accountDropdown = (
-                <Nav id="accounsAndLogin">
-                    <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
-                        <MenuItem eventKey={3.1}>Action</MenuItem>
-                        <MenuItem eventKey={3.2}>Another action</MenuItem>
-                        <MenuItem eventKey={3.3}>Something else here</MenuItem>
-                        <MenuItem divider />
-                        <MenuItem eventKey={3.3}>Separated link</MenuItem>
-                    </NavDropdown>
-                </Nav>
-            );
-          ReactDOM.render(accountDropdown, document.getElementById("accountsAndLogin"));
-          return accountDropdown;
-        }
-    }
-    function changeToLogin() {
-        if(!loggedIn) {
-            var loginInNavbar = (
-                <Nav id="accountsAndLogin" pullRight>
-                    <NavItem eventKey={1} onClick={ login }>Login</NavItem>
-                </Nav>
-            )
-        }
-
-    }
-};
-
+// Modal for Login
 const LoginModal = React.createClass({
       getInitialState() {
-         return { showModal: false };
+         return {
+            showModal: false,
+            userName: "",
+            password: ""
+         };
       },
 
       close() {
@@ -86,33 +45,63 @@ const LoginModal = React.createClass({
       open() {
         this.setState({ showModal: true });
       },
+      handleInputChange(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
 
+        this.setState({
+          [name]: value
+        });
+      },
+      checkCredentials() {
+        // Put the Credentials verification here
+      },
       render() {
-        const popover = (
-          <Popover id="modal-popover" title="popover">
-            very popover. such engagement
-          </Popover>
-        );
-        const tooltip = (
-          <Tooltip id="modal-tooltip">
-            wow.
-          </Tooltip>
-        );
-
         return (
           <div>
             <Button
               bsStyle="primary"
-              onClick={ this.open }>    Login/Sign up
+              onClick={this.open}>Login/Sign up
             </Button>
             <Modal show={this.state.showModal} onHide={this.close}>
               <Modal.Header closeButton>
-                <Modal.Title>Login or Sign Up</Modal.Title>
+                <Modal.Title>Welcome to Is It Cancer!</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <h4>Login</h4>
-                //Handle inputs here
-
+                <h3>Login</h3>
+                  <form>
+                    <h5>Email</h5>
+                      <input
+                        name="userName"
+                        type="string"
+                        className="wideInput"
+                        value={this.state.userName}
+                        onChange={this.handleInputChange} />
+                    <br />
+                     <h5>Password</h5>
+                      <input
+                        name="password"
+                        type="password"
+                        className="wideInput"
+                        value={this.state.password}
+                        onChange={this.handleInputChange} />
+                  </form>
+                  <br />
+                  <Button id="pullRightButton"
+                    bsStyle="primary"
+                    onClick={this.checkCredentials}> Login
+                  </Button>
+                  <br />
+                  <hr />
+                  <h3>Don't have account?</h3>
+                  <br />
+                  <Button id="largeButtonWidth"
+                    bsStyle="info"
+                    bsSize="large"
+                    onClick={this.open}> Sign up
+                  </Button>
+                   {/* TODO: Add some sign up functionality */}
               </Modal.Body>
               <Modal.Footer>
                 <Button onClick={this.close}>Close</Button>
@@ -123,8 +112,6 @@ const LoginModal = React.createClass({
       }
 });
 
-
-// ReactDOM.render(login, document.getElementById("login"));
 ReactDOM.render(navbarInstance, document.getElementById("staticNavbar"));
 ReactDOM.render(<LoginModal />, document.getElementById("loginNav"));
 

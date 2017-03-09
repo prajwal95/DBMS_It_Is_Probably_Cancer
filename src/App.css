@@ -18,14 +18,28 @@
   font-size: large;
 }
 
-#siteName {
-  padding-right: 25px;
+.wideInput {
+    margin-left: 2%;
+    width: 95%;
+}
+
+#largeButtonWidth {
+    width: 100%;
+    margin-top: 1%;
 }
 
 #loginNav {
     margin-left: 50%;
     padding-top: 4%;
     padding-bottom: 4%;
+}
+
+#pullRightButton {
+    float: right;
+}
+
+#siteName {
+  padding-right: 25px;
 }
 
 @keyframes App-logo-spin {
