@@ -1,25 +1,25 @@
-
+#!/usr/local/bin/php
 <?php
 
 // Create connection to Oracle
-$conn = oci_connect("pk1", "Guna#gator", "oracle.cise.ufl.edu:1521/orcl");
+$connection = oci_connect($username = 'cheung',
+                          $password = 'data&base42017',
+                          $connection_string = '//oracle.cise.ufl.edu/orcl');
 
-$query = 'select * from borders';
-$stid = oci_parse($conn, $query);
+// Get query string as a get request (maybe change to POST later)
+$query = str_replace('%20', ' ',$_SERVER['QUERY_STRING']);
+
+$stid = oci_parse($connection, $query);
 $r = oci_execute($stid);
 
-// Fetch the results in an associative array 
-print '<table border="1">';
-while ($row = oci_fetch_array($stid, OCI_RETURN_NULLS+OCI_ASSOC)) {
-   print '<tr>';
-   foreach ($row as $item) {
-      print '<td>'.($item?htmlentities($item):' ').'</td>';
-   }
-   print '</tr>';
-}
-print '</table>';
-
+// Fetch the results in an associative array
+$rows = array();
+while($r = oci_fetch_assoc($stid)) {
+        $rows[] = $r;
+ }
+$result =(json_encode($rows));
+echo "$result";
 // Close the Oracle connection
-oci_close($conn);  
+oci_close($connection);
 
 ?>
