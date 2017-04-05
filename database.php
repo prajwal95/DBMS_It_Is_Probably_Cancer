@@ -7,7 +7,7 @@ $connection = oci_connect($username = 'cheung',
                           $connection_string = '//oracle.cise.ufl.edu/orcl');
 
 // Get query string as a get request (maybe change to POST later)
-$query = str_replace('%20', ' ',$_SERVER['QUERY_STRING']);
+$query = urldecode($_SERVER['QUERY_STRING']);
 
 $stid = oci_parse($connection, $query);
 $r = oci_execute($stid);
