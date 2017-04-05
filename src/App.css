@@ -23,6 +23,11 @@
     width: 95%;
 }
 
+#genderButton {
+    margin-left: 3 px;
+    margin-right: 10 px;
+}
+
 #largeButtonWidth {
     width: 100%;
     margin-top: 1%;
@@ -36,10 +41,16 @@
 
 #pullRightButton {
     float: right;
+    margin-top: 5px;
+    margin-right: 14px;
 }
 
 #siteName {
   padding-right: 25px;
+}
+
+#failureMessage {
+    color: red;
 }
 
 @keyframes App-logo-spin {

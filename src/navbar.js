@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from "react-dom";
+import axios from 'axios';
 
 // Import navbar features
 import { Navbar } from "react-bootstrap";
@@ -7,111 +8,249 @@ import { Nav } from "react-bootstrap";
 import { NavItem } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
+import {RadioGroup, Radio} from 'react-radio-group';
 
 const navbarInstance = (
-  <Navbar inverse collapseOnSelect>
+    <Navbar inverse collapseOnSelect>
     <Navbar.Header>
-      <Navbar.Brand>
+        <Navbar.Brand>
         <a href="#" id="siteName">Is It Cancer? ... Probably</a>
-      </Navbar.Brand>
-      <Navbar.Toggle />
+    </Navbar.Brand>
+    <Navbar.Toggle />
     </Navbar.Header>
     <Navbar.Collapse>
-      <Nav>
-        <NavItem eventKey={1} href="#">Foods</NavItem>
-        <NavItem eventKey={2} href="#">Log</NavItem>
-      </Nav>
-      <Nav pullRight>
+        <Nav>
+            <NavItem eventKey={1} href="#">Foods</NavItem>
+            <NavItem eventKey={2} href="#">Log</NavItem>
+        </Nav>
+    <Nav pullRight>
         <NavItem id="loginNav"></NavItem>
-      </Nav>
+    </Nav>
     </Navbar.Collapse>
-  </Navbar>
+</Navbar>
 );
 
+
+
 // Modal for Login
-const LoginModal = React.createClass({
-      getInitialState() {
-         return {
+const Login = React.createClass({
+    getInitialState() {
+        return {
             showModal: false,
-            userName: "",
-            password: ""
-         };
-      },
-
-      close() {
-          this.setState({ showModal: false });
-      },
-
-      open() {
+            loggedIn: false,
+            loginFailed: false,
+            signUp: false,
+            signInError: false,
+            userName: "500@test.com",
+            password: "testpass",
+            first_name: undefined,
+            gender: undefined,
+            dob: undefined,
+            weight: undefined
+        };
+    },
+    close() {
+        this.setState({ showModal: false });
+    },
+    open() {
         this.setState({ showModal: true });
-      },
-      handleInputChange(event) {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
+    },
+    handleInputChange(event) {
+        // TODO: clean up even handling for radio button groups, since they're not passed in as other event formats
+        const target = typeof event.target === 'undefined' ? this : event.target ;
+        const value = typeof event.target === 'undefined'  ? event : target.value;
+        const name = typeof event.target === 'undefined' ? "gender" : target.name;
 
-        this.setState({
-          [name]: value
-        });
-      },
-      checkCredentials() {
+        this.setState({ [name]: value });
+    },
+    checkCredentials() {
         // Put the Credentials verification here
-      },
-      render() {
+        var _this = this;
+        axios
+            .get("http://www.cise.ufl.edu/~cheung/dataConn.php?" + "select * from users where email='" + this.state.userName + "' and password='" + this.state.password + "'")
+            .then(function (result) {
+                if(result.data.length > 0) {
+                    _this.setState({
+                        showModal: false,
+                        loggedIn: true,
+                        loginFailed: false,
+                        errorMessage: undefined
+                    });
+                } else {
+                        _this.setState({ loginFailed: true });
+                }
+        });
+    },
+    signUp() {
+        this.setState({ signUp: true });
+    },
+    submitSignUp() {
+    console.log(this.state.gender);
+        var _this = this;
+            axios
+                .get("http://www.cise.ufl.edu/~cheung/dataConn.php?" + "insert into users(email, first_name, password, date_of_birth, gender, weight) " +
+                    "values(" +
+                        "'" + this.state.userName + "'," +
+                        "'" + this.state.first_name + "'," +
+                        "'" + this.state.password + "'," +
+                        "TO_DATE('" + this.state.dob + "','YYYY-MM-DD')," +
+                        "'" + this.state.gender + "'," +
+                        "'" + this.state.weight + "')")
+                .then(function (result) {
+                    if(result.data.includes("<pre>"))
+                    {
+                        _this.setState({
+                            signInError: true,
+                            errorMessage: result.data
+                        });
+                    } else {
+                        _this.setState({
+                             signInError: false,
+                             loggedIn: true,
+                             showModal: false
+                        });
+                     }
+                }).catch(function (error) {
+                    console.log(error);
+                    _this.setState({
+                        signInError: true,
+                        errorMessage: error.message
+                    });
+                });
+    },
+    logOut() {
+        this.setState({ loggedIn: false })
+    },
+    render() {
         return (
-          <div>
-            <Button
-              bsStyle="primary"
-              onClick={this.open}>Login/Sign up
-            </Button>
-            <Modal show={this.state.showModal} onHide={this.close}>
-              <Modal.Header closeButton>
-                <Modal.Title>Welcome to Is It Cancer!</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
+            <div>
+                {this.state.loggedIn?  (
+                    <Button
+                        bsStyle="primary"
+                        onClick={this.logOut}>Log Out
+                    </Button>) : (
+                    <Button
+                        bsStyle="primary"
+                        onClick={this.open}>Login/Sign up
+                    </Button>)
+
+                }
+                <Modal show={this.state.showModal} onHide={this.close}>
+                    <Modal.Header closeButton>
+                    <Modal.Title>Welcome to Is It Cancer!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                {this.state.signUp?
+                    (<div>
+                        <form>
+                            <h5>Email</h5>
+                            <input
+                                name="userName"
+                                type="string"
+                                className="wideInput"
+                                placeholder="email address"
+                                value={this.state.userName}
+                                onChange={this.handleInputChange} />
+                            <br />
+                            <h5>Password</h5>
+                            <input
+                                name="password"
+                                type="password"
+                                className="wideInput"
+                                placeholder="password"
+                                value={this.state.password}
+                                onChange={this.handleInputChange} />
+                            <br />
+                            <h5>First Name</h5>
+                            <input
+                                name="first_name"
+                                type="string"
+                                className="wideInput"
+                                placeholder="First Name"
+                                value={this.state.name}
+                                onChange={this.handleInputChange} />
+                            <br />
+                            <h5>Date of Birth</h5>
+                            <input
+                                name="dob"
+                                type="date"
+                                className="wideInput"
+                                value={this.state.dob}
+                                onChange={this.handleInputChange} />
+                            <h5>Gender</h5>
+                            <RadioGroup name="gender" selectedValue={this.state.gender} onChange={this.handleInputChange}>
+                                <Radio value="F" />Female
+                                <Radio value="M" />Male
+                            </RadioGroup>
+                            <h5>Weight</h5>
+                            <input
+                                name="weight"
+                                type="string"
+                                className="wideInput"
+                                value={this.state.weight}
+                                onChange={this.handleInputChange} />
+                        </form>
+                        <Button id="pullRightButton"
+                            bsStyle="primary"
+                            type="submit"
+                            onClick={this.submitSignUp}> SignUp
+                        </Button>
+                        { this.state.signInError &&
+                            <h4 id="failureMessage"> Sign up failed, please check your fields and try again: {this.state.errorMessage} </h4>
+                        }
+                    </div>) : (
+                <div>
                 <h3>Login</h3>
-                  <form>
-                    <h5>Email</h5>
-                      <input
-                        name="userName"
-                        type="string"
-                        className="wideInput"
-                        value={this.state.userName}
-                        onChange={this.handleInputChange} />
+                    <form>
+                        <h5>Email</h5>
+                        <input
+                            name="userName"
+                            type="string"
+                            className="wideInput"
+                            placeholder="email address"
+                            value={this.state.userName}
+                            onChange={this.handleInputChange} />
+                        <br />
+                        <h5>Password</h5>
+                        <input
+                            name="password"
+                            type="password"
+                            className="wideInput"
+                            placeholder="password"
+                            value={this.state.password}
+                            onChange={this.handleInputChange} />
+
+                        {this.state.loginFailed === true &&
+                             <h4 id="failureMessage"> Login Failed, please try again</h4>
+                        }
+                        <br />
+                        <Button id="pullRightButton"
+                            bsStyle="primary"
+                            onClick={this.checkCredentials}> Login
+                        </Button>
+                    </form>
                     <br />
-                     <h5>Password</h5>
-                      <input
-                        name="password"
-                        type="password"
-                        className="wideInput"
-                        value={this.state.password}
-                        onChange={this.handleInputChange} />
-                  </form>
-                  <br />
-                  <Button id="pullRightButton"
-                    bsStyle="primary"
-                    onClick={this.checkCredentials}> Login
-                  </Button>
-                  <br />
-                  <hr />
-                  <h3>Don't have account?</h3>
-                  <br />
-                  <Button id="largeButtonWidth"
-                    bsStyle="info"
-                    bsSize="large"
-                    onClick={this.open}> Sign up
-                  </Button>
-                   {/* TODO: Add some sign up functionality */}
-              </Modal.Body>
-              <Modal.Footer>
-                <Button onClick={this.close}>Close</Button>
-              </Modal.Footer>
-            </Modal>
-          </div>
+                    <hr />
+                    <h3>Don't have account?</h3>
+                    <br />
+                    <Button id="largeButtonWidth"
+                        bsStyle="info"
+                        bsSize="large"
+                        onClick={this.signUp}> Sign up
+                    </Button>
+                    </div>)}
+                    </Modal.Body>
+                    <br />
+                    <br />
+                    <Modal.Footer>
+                        <Button onClick={this.close}>Close</Button>
+                    </Modal.Footer>
+                </Modal>
+            </div>
         );
-      }
+    }
 });
 
 ReactDOM.render(navbarInstance, document.getElementById("staticNavbar"));
-ReactDOM.render(<LoginModal />, document.getElementById("loginNav"));
+ReactDOM.render(<Login />, document.getElementById("loginNav"));
 
