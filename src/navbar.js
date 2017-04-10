@@ -3,12 +3,15 @@ import ReactDOM from "react-dom";
 import axios from 'axios';
 
 // Import navbar features
-import { Navbar } from "react-bootstrap";
+import { Navbar, MenuItem, NavDropdown } from "react-bootstrap";
 import { Nav } from "react-bootstrap";
 import { NavItem } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
 import {RadioGroup, Radio} from 'react-radio-group';
+
+export {globalUserName};
+var globalUserName;
 
 const navbarInstance = (
     <Navbar inverse collapseOnSelect>
@@ -41,12 +44,12 @@ const Login = React.createClass({
             loginFailed: false,
             signUp: false,
             signInError: false,
-            userName: undefined,
-            password: undefined,
-            first_name: undefined,
-            gender: undefined,
-            dob: undefined,
-            weight: undefined
+            userName: "",
+            password: "",
+            first_name: "",
+            gender: "",
+            dob: "",
+            weight: ""
         };
     },
     close() {
@@ -76,16 +79,16 @@ const Login = React.createClass({
                         loginFailed: false,
                         errorMessage: undefined
                     });
+                    globalUserName = _this.state.userName;
                 } else {
                         _this.setState({ loginFailed: true });
                 }
         });
     },
     signUp() {
-        this.setState({ signUp: true });
+        this.setState({ signUp: !this.state.signUp });
     },
     submitSignUp() {
-    console.log(this.state.gender);
         var _this = this;
             axios
                 .get("http://www.cise.ufl.edu/~cheung/dataConn.php?" + "insert into users(email, first_name, password, date_of_birth, gender, weight) " +
@@ -109,6 +112,7 @@ const Login = React.createClass({
                              loggedIn: true,
                              showModal: false
                         });
+                        globalUserName = _this.state.userName;
                      }
                 }).catch(function (error) {
                     console.log(error);
@@ -125,15 +129,25 @@ const Login = React.createClass({
         return (
             <div>
                 {this.state.loggedIn?  (
-                    <Button
-                        bsStyle="primary"
-                        onClick={this.logOut}>Log Out
-                    </Button>) : (
-                    <Button
-                        bsStyle="primary"
-                        onClick={this.open}>Login/Sign up
-                    </Button>)
-
+                    <div id="navbarPad">
+                         <NavDropdown eventKey={3} title={this.state.userName} id="basic-nav-dropdown" noCaret>
+                                <MenuItem eventKey={3.1} href='/account'>Account Info</MenuItem>
+                                <MenuItem eventKey={3.2}>Log</MenuItem>
+                                <MenuItem divider />
+                                <MenuItem eventKey={3.3}>
+                                    <Button
+                                        bsStyle="primary"
+                                        onClick={this.logOut}>Log Out
+                                    </Button>
+                                </MenuItem>
+                      </NavDropdown>
+                    </div>
+                    ) : (
+                        <Button
+                            bsStyle="primary"
+                            onClick={this.open}>Login/Sign up
+                        </Button>
+                    )
                 }
                 <Modal show={this.state.showModal} onHide={this.close}>
                     <Modal.Header closeButton>
@@ -198,6 +212,12 @@ const Login = React.createClass({
                         { this.state.signInError &&
                             <h4 id="failureMessage"> Sign up failed, please check your fields and try again: {this.state.errorMessage} </h4>
                         }
+
+                        <br/>
+                        <Button id="largeButtonWidth"
+                            bsStyle="info"
+                            onClick={this.signUp}> Go Back to Login
+                        </Button>
                     </div>) : (
                 <div>
                 <h3>Login</h3>

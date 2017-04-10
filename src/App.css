@@ -23,6 +23,11 @@
     width: 95%;
 }
 
+#basic-nav-dropdown {
+    color: white;
+    font-size: medium;
+}
+
 #genderButton {
     margin-left: 3 px;
     margin-right: 10 px;
@@ -37,6 +42,10 @@
     margin-left: 50%;
     padding-top: 4%;
     padding-bottom: 4%;
+}
+
+#navbarPad {
+    padding-top: 20%;
 }
 
 #pullRightButton {
