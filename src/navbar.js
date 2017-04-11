@@ -17,6 +17,7 @@ var globalPassword;
 
 var Router = require('react-router');
 var account = require('./account.js');
+var foods = require('./search.js');
 
 const navbarInstance = (
     <Navbar inverse collapseOnSelect>
@@ -99,6 +100,9 @@ const Login = React.createClass({
     goToAccounts() {
         Router.browserHistory.push('/account');
     },
+    goToFoods() {
+        Router.browserHistory.push('/foods');
+    },
     submitSignUp() {
         var _this = this;
             axios
@@ -155,6 +159,12 @@ const Login = React.createClass({
                                 <MenuItem eventKey={3.2}>Log</MenuItem>
                                 <MenuItem divider />
                                 <MenuItem eventKey={3.3}>
+                                    <Button
+                                        id="foodsButton"
+                                        onClick={this.goToFoods}>Foods
+                                    </Button></MenuItem>
+                                <MenuItem divider />
+                                <MenuItem eventKey={3.4}>
                                     <Button
                                         bsStyle="primary"
                                         onClick={this.logOut}>Log Out

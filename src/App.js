@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import Login from './navbar';
 import AccountInfo from './account';
-
+import Search from './search';
 import ReactDOM from 'react-dom';
 import { Route, browserHistory, Router, IndexRoute } from 'react-router';
 
@@ -14,6 +14,7 @@ class App extends Component {
       <Router history={browserHistory}>
         <Route path='/' component={Home} />
         <Route path='/account' component={AccountInfo} />
+        <Route path='/foods' component={Search} />
         <Route component={Login} />
       </Router>
     )
