@@ -26,19 +26,11 @@ var AccountInfo = React.createClass({
         }
         return null;
     },
-    test() {
-    console.log(loginInfo);
-            console.log(loginInfo.globalUserName);
-            console.log(loginInfo.globalLoggedIn);
-            console.log(this.props.location.pathname);
-            return null;
-    },
     render() {
         var temp = loginInfo.globalLoggedIn;
         return (
-        <div>
-            {temp? (<div>LOGGED IN</div>) : (<div>Please Log In to see account information</div>)}
-            <Button onClick={this.test}> test </Button>
+            <div>
+                {temp? (<div>LOGGED IN</div>) : (<div>Please Log In to see account information</div>)}
             </div>
         );
     }

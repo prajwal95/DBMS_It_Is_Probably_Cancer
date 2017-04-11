@@ -9,7 +9,7 @@ import { NavItem } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
 import { RadioGroup, Radio } from 'react-radio-group';
-import { Link, hashHistory } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 
 var globalUserName;
 var globalLoggedIn;
@@ -87,7 +87,7 @@ const Login = React.createClass({
                     globalPassword = _this.state.password;
 
                     // Redirects to landing page
-                    Router.hashHistory.push('/');
+                    Router.browserHistory.push('/');
                 } else {
                         _this.setState({ loginFailed: true });
                 }
@@ -95,6 +95,9 @@ const Login = React.createClass({
     },
     signUp() {
         this.setState({ signUp: !this.state.signUp });
+    },
+    goToAccounts() {
+        Router.browserHistory.push('/account');
     },
     submitSignUp() {
         var _this = this;
@@ -123,7 +126,7 @@ const Login = React.createClass({
                         globalUserName = _this.state.userName;
                         globalLoggedIn = _this.state.loggedIn;
                         globalPassword = _this.state.password;
-                        Router.hashHistory.push('/');
+                        Router.browserHistory.push('/');
                      }
                 }).catch(function (error) {
                     console.log(error);
@@ -135,7 +138,7 @@ const Login = React.createClass({
     },
     logOut() {
         this.setState({ loggedIn: false });
-        Router.hashHistory.push('/');
+        Router.browserHistory.push('/');
     },
     render() {
         return (
@@ -143,7 +146,12 @@ const Login = React.createClass({
                 {this.state.loggedIn?  (
                     <div id="navbarPad">
                          <NavDropdown eventKey={3} title={this.state.userName} id="basic-nav-dropdown" noCaret>
-                                <MenuItem eventKey={3.1}><Link to='/account'>Account Info</Link></MenuItem>
+                                <MenuItem eventKey={3.1}>
+                                    <Button
+
+                                        id="accountButton"
+                                        onClick={this.goToAccounts}>Account
+                                    </Button></MenuItem>
                                 <MenuItem eventKey={3.2}>Log</MenuItem>
                                 <MenuItem divider />
                                 <MenuItem eventKey={3.3}>
@@ -287,4 +295,4 @@ ReactDOM.render(navbarInstance, document.getElementById("staticNavbar"));
 ReactDOM.render(<Login />, document.getElementById("loginNav"));
 
 module.export = { globalUserName, globalLoggedIn, globalPassword};
-export default Login;
+export default Navbar;

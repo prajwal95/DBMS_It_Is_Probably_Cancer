@@ -5,7 +5,7 @@ import Login from './navbar';
 import AccountInfo from './account';
 
 import ReactDOM from 'react-dom';
-import { Router, Route, Link, IndexRoute, hashHistory, browserHistory, BrowserRouter } from 'react-router';
+import { Route, browserHistory, Router, IndexRoute } from 'react-router';
 
 
 class App extends Component {
@@ -14,7 +14,7 @@ class App extends Component {
       <Router history={browserHistory}>
         <Route path='/' component={Home} />
         <Route path='/account' component={AccountInfo} />
-        <Route path='/nav' component={Login} />
+        <Route component={Login} />
       </Router>
     )
   }

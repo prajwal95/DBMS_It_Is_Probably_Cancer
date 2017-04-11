@@ -23,6 +23,10 @@
     width: 95%;
 }
 
+#accountButton {
+    border: none;
+}
+
 #basic-nav-dropdown {
     color: white;
     font-size: medium;
