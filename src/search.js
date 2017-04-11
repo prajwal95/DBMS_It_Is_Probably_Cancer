@@ -6,7 +6,8 @@ import FoodSearch from './searchComponents/foodGroup';
 import ResultContainer from './searchComponents/resultList';
 import FilterComponent from './searchComponents/filterComponent';
 
-const dbSource = "http://localhost/database.php?";
+//const dbSource = "http://localhost/database.php?";
+const dbSource = "http://www.cise.ufl.edu/~sedlabad/db.php?";
 
 
 const Search = React.createClass({

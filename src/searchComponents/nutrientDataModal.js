@@ -3,7 +3,8 @@ import {Button} from "react-bootstrap";
 import { Modal } from "react-bootstrap";
 import Select from 'react-select';
 
-const dbSource = "http://localhost/database.php?";
+//const dbSource = "http://localhost/database.php?";
+const dbSource = "http://www.cise.ufl.edu/~sedlabad/db.php?";
 
 var ServingSize = React.createClass({
   propTypes: {

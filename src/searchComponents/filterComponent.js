@@ -4,7 +4,8 @@ import Select from 'react-select';
 
 const filterOpt = [{"label":"Between", "value":1}, {"label":"Equal to", "value":2}, {"label":"Max", "value":3}, {"label":"Min", "value":4}];
 
-const dbSource = "http://localhost/database.php?";
+//const dbSource = "http://localhost/database.php?";
+const dbSource = "http://www.cise.ufl.edu/~sedlabad/db.php?";
 
 const Filter = React.createClass({
 	minVal: -1, 
