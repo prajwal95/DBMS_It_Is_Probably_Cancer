@@ -28,7 +28,7 @@ const navbarInstance = (
     <Navbar.Toggle />
     </Navbar.Header>
     <Navbar.Collapse>
-        <Nav>
+        <Nav onSelect={handleSelect}>
             <NavItem eventKey={1} href="#">Foods</NavItem>
             <NavItem eventKey={2} href="#">Log</NavItem>
         </Nav>
@@ -38,6 +38,11 @@ const navbarInstance = (
     </Navbar.Collapse>
 </Navbar>
 );
+
+function handleSelect(selectedKey) {
+  //alert('selected ' + selectedKey);
+}
+
 
 // Modal for Login
 const Login = React.createClass({
