@@ -70,3 +70,9 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.not-logged-in {
+	margin: 2em !important;
+	padding: 2em !important;
+	text-align: center;
+}

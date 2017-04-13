@@ -9,7 +9,9 @@ import { NavItem } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
 import { RadioGroup, Radio } from 'react-radio-group';
-import { Link, browserHistory } from 'react-router';
+import { Route, RouteHandler, Link, browserHistory } from 'react-router';
+import { LinkContainer } from 'react-router-bootstrap';
+import { routes } from './App'
 
 var globalUserName;
 var globalLoggedIn;
@@ -23,14 +25,16 @@ const navbarInstance = (
     <Navbar inverse collapseOnSelect>
     <Navbar.Header>
         <Navbar.Brand>
-        <a href="#" id="siteName">Is It Cancer? ... Probably</a>
-    </Navbar.Brand>
-    <Navbar.Toggle />
+			<a href="#" id="siteName">Is It Cancer? ... Probably</a>
+		</Navbar.Brand>
+		<Navbar.Toggle />
     </Navbar.Header>
     <Navbar.Collapse>
-        <Nav onSelect={handleSelect}>
+        <Nav>
             <NavItem eventKey={1} href="#">Foods</NavItem>
-            <NavItem eventKey={2} href="#">Log</NavItem>
+			<LinkContainer to="/log">
+				<NavItem eventKey={2} href="#">Log</NavItem>
+			</LinkContainer>
         </Nav>
     <Nav pullRight>
         <NavItem id="loginNav"></NavItem>
@@ -38,10 +42,6 @@ const navbarInstance = (
     </Navbar.Collapse>
 </Navbar>
 );
-
-function handleSelect(selectedKey) {
-  //alert('selected ' + selectedKey);
-}
 
 
 // Modal for Login

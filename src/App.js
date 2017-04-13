@@ -6,21 +6,30 @@ import AccountInfo from './account';
 import Search from './search';
 import ReactDOM from 'react-dom';
 import { Route, browserHistory, Router, IndexRoute } from 'react-router';
-
+import FoodLog from './FoodLog'
+import FoodLog2 from './FoodLog2'
 
 class App extends Component {
   render() {
     return (
-      <Router history={browserHistory}>
-        <Route path='/' component={Home} />
-        <Route path='/account' component={AccountInfo} />
-        <Route path='/foods' component={Search} />
-        <Route component={Login} />
-      </Router>
+		routes
     )
   }
 }
 const Home = () => <h1>LANDING PAGE</h1>;
+
+const routes = (
+	<Router history={browserHistory}>
+		<Route path='/' component={Home} />
+		<Route path='/account' component={AccountInfo} />
+		<Route path='/foods' component={Search} />
+		<Route path='/log' component={FoodLog} />
+		<Route path='/log2' component={FoodLog2} />
+		<Route component={Login} />
+	</Router>
+);
+
+module.export = routes;
 export default App;
 
 //
